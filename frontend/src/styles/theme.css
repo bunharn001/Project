@@ -1,0 +1,78 @@
+/* Google Material-inspired theme tokens (light) */
+:root {
+  --md-sys-color-primary: #6750A4;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #EADDFF;
+  --md-sys-color-on-primary-container: #21005D;
+
+  --md-sys-color-secondary: #625B71;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #E8DEF8;
+  --md-sys-color-on-secondary-container: #1D192B;
+
+  --md-sys-color-background: #FFFBFE;
+  --md-sys-color-on-background: #1C1B1F;
+  --md-sys-color-surface: #FFFBFE;
+  --md-sys-color-on-surface: #1C1B1F;
+  --md-sys-color-surface-variant: #E7E0EC;
+  --md-sys-color-on-surface-variant: #49454F;
+  --md-sys-color-outline: #CAC4D0;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --elev-1: 0 1px 2px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.08);
+  --elev-2: 0 2px 6px rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.06);
+
+  /* Anchor offset for sticky headers */
+  --app-scroll-margin: 72px;
+}
+
+/* Base */
+html, body, #root { height: 100%; }
+body {
+  background: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  font-family: 'Noto Sans Thai', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+html { scroll-behavior: smooth; }
+
+/* Ensure in-page anchors don't hide under sticky nav */
+:where(*[id]) { scroll-margin-top: var(--app-scroll-margin); }
+
+@media (max-width: 640px) {
+  :root { --app-scroll-margin: 96px; }
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  text-decoration: none;
+  color: var(--md-sys-color-on-primary);
+  font-weight: 700;
+  transition: transform 0.1s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn--primary {
+  background: var(--md-sys-color-primary);
+  box-shadow: var(--elev-2);
+}
+.btn--primary:hover { filter: brightness(1.05); }
+.btn--ghost {
+  color: var(--md-sys-color-on-surface);
+  background: var(--md-sys-color-surface);
+  border-color: var(--md-sys-color-outline);
+}
+.btn--ghost:hover { background: #fff; }
+
+/* Cards */
+.card { background: var(--md-sys-color-surface); border: 1px solid var(--md-sys-color-outline); border-radius: var(--radius-md); box-shadow: var(--elev-1); }
+.card__title { color: var(--md-sys-color-on-surface); }
+.card__text { color: var(--md-sys-color-on-surface-variant); }
