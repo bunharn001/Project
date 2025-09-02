@@ -1,0 +1,131 @@
+.home {
+  --bg: #0f172a;
+  --card: #0b1220;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --primary: #6366f1;
+  --primary-700: #4f46e5;
+  --ring: rgba(99, 102, 241, 0.35);
+  color: var(--text);
+  background: radial-gradient(1200px 600px at 70% -10%, rgba(99,102,241,0.15), transparent),
+              radial-gradient(800px 400px at 0% 0%, rgba(56,189,248,0.12), transparent),
+              var(--bg);
+  min-height: 100vh;
+}
+
+.home__hero {
+  padding: 96px 16px 56px;
+  text-align: center;
+}
+
+.home__hero-inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.home__title {
+  font-size: clamp(32px, 6vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+}
+
+.home__subtitle {
+  color: var(--muted);
+  font-size: clamp(16px, 2.2vw, 20px);
+  margin: 0 auto 24px;
+  max-width: 720px;
+}
+
+.home__cta {
+  display: inline-flex;
+  gap: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  transition: transform 0.1s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:active { transform: translateY(1px); }
+
+.btn--primary {
+  background: linear-gradient(180deg, var(--primary), var(--primary-700));
+  box-shadow: 0 8px 30px -10px var(--ring);
+}
+
+.btn--primary:hover { filter: brightness(1.07); }
+
+.btn--ghost {
+  color: var(--text);
+  border-color: rgba(148, 163, 184, 0.35);
+  background: rgba(148, 163, 184, 0.06);
+}
+
+.btn--ghost:hover { border-color: rgba(148, 163, 184, 0.6); }
+
+.home__features {
+  padding: 24px 16px 8px;
+}
+
+.home__features-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .home__features-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .home__features-grid { grid-template-columns: 1fr; }
+}
+
+.feature {
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.feature__icon { font-size: 28px; }
+
+.feature__title {
+  margin: 10px 0 6px;
+  font-size: 18px;
+}
+
+.feature__text { color: var(--muted); margin: 0; }
+
+.home__panel {
+  max-width: 880px;
+  margin: 36px auto 0;
+  padding: 24px 16px 48px;
+  text-align: center;
+}
+
+.home__steps {
+  margin: 8px auto 16px;
+  color: var(--muted);
+  text-align: left;
+  max-width: 420px;
+}
+
+.home__footer {
+  padding: 24px 16px 40px;
+  text-align: center;
+  color: var(--muted);
+}
+
