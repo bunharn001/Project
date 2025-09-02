@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../interfaces/fields/fields.css';
 import TextField from '../../interfaces/fields/TextField';
 import SelectField from '../../interfaces/fields/SelectField';
@@ -11,6 +12,7 @@ const ROLES = ['customer', 'admin'];
 const SPICE = ['none', 'mild', 'medium', 'hot'];
 
 function Create() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: 'eater Doe',
     email: 'johndoe@example.com',
@@ -51,6 +53,8 @@ function Create() {
       const payload = { ...form, isActive: true };
       const res = await createUser(payload);
       setResult(res);
+      // Redirect to login after successful creation
+      navigate('/login', { replace: true, state: { from: 'create' } });
     } catch (err) {
       setError(err.message || 'Failed to create user');
     } finally {
@@ -62,7 +66,7 @@ function Create() {
     <main className="home" style={{ background: 'var(--md-sys-color-background)' }}>
       <section className="home__panel" style={{ paddingTop: 24 }}>
         <h1 style={{ margin: '0 0 12px' }}>Create User</h1>
-        <p className="muted" style={{ margin: '0 0 16px' }}>ส่งข้อมูลไปที่ API: http://localhost:4000/users</p>
+        <p className="muted" style={{ margin: '0 0 16px' }}>ส่งข้อมูลไปที่ API: http://localhost:4000/api/users</p>
 
         <form className="create__form" onSubmit={onSubmit}>
           <div className="create__row">

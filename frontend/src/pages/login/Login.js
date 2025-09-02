@@ -58,6 +58,7 @@ function Login() {
             </button>
           </div>
           {error && <div className="card" style={{ padding: 12, marginTop: 8, color: 'crimson' }}>Error: {error}</div>}
+          {success && <div className="card" style={{ padding: 12, marginTop: 8, color: 'green' }}>{success}</div>}
         </form>
       </section>
     </main>
