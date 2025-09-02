@@ -34,7 +34,7 @@ function Login() {
     <main className="home" style={{ background: 'var(--md-sys-color-background)' }}>
       <section className="home__panel" style={{ paddingTop: 24 }}>
         <h1 style={{ margin: '0 0 12px' }}>เข้าสู่ระบบ</h1>
-        <p className="muted" style={{ margin: '0 0 16px' }}>ส่งข้อมูลไปที่ API: http://localhost:4000/login</p>
+        <p className="muted" style={{ margin: '0 0 16px' }}>ส่งข้อมูลไปที่ API: http://localhost:4000/api/login</p>
 
         <form className="create__form" onSubmit={onSubmit}>
           <TextField label="Email" name="email" type="email" value={email} onChange={setEmail} required />
@@ -64,6 +64,10 @@ function Login() {
 
           {error && <div className="card" style={{ padding: 12, marginTop: 8, color: 'crimson' }}>Error: {error}</div>}
           {success && <div className="card" style={{ padding: 12, marginTop: 8, color: 'green' }}>{success}</div>}
+
+          <p className="muted" style={{ marginTop: 16 }}>
+            ยังไม่มีบัญชี? <a href="/create">สมัครสมาชิก</a>
+          </p>
         </form>
       </section>
     </main>
@@ -71,4 +75,3 @@ function Login() {
 }
 
 export default Login;
-
