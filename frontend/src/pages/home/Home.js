@@ -65,6 +65,7 @@ function Home() {
             <a href="#menu">เมนู</a>
             <a href="#specials">พิเศษวันนี้</a>
             <a href="#contact">ติดต่อเรา</a>
+            <a href="/create">สร้างผู้ใช้</a>
             <a href="/login">เข้าสู่ระบบ</a>
             <a className="home__nav-tel" href="tel:+6612345678">โทร 012-345-678</a>
           </div>

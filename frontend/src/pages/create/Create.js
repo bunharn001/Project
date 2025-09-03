@@ -49,17 +49,20 @@ function Create() {
     setError(null);
     setResult(null);
     try {
-      // Force isActive true when creating
-      const payload = { ...form, isActive: true };
-      const res = await createUser(payload);
-      setResult(res);
-      // Redirect to login after successful creation
+    // Force isActive true when creating
+    const payload = { ...form, isActive: true };
+    const res = await createUser(payload);
+    setResult(res);
+
+    // Add a 2-second delay before redirecting to the login page
+    setTimeout(() => {
       navigate('/login', { replace: true, state: { from: 'create' } });
-    } catch (err) {
-      setError(err.message || 'Failed to create user');
-    } finally {
-      setSending(false);
-    }
+    }, 2000);
+  } catch (err) {
+    setError(err.message || 'Failed to create user');
+  } finally {
+    setSending(false);
+  }
   };
 
   return (
