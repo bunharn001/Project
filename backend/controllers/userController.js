@@ -1,99 +1,127 @@
-const express = require('express');
-const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { protect } = require('../middleware/authenMiddleware');
 const User = require('../models/User');
 
 // Helper function to generate a JWT token
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
-  });
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
+  });
 };
 
-// Route for user login
-router.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
+// @desc Register a new user
+// @route POST /api/users
+// @access Public
+const registerUser = async (req, res) => {
+  try {
+    const { email, password, name, ...restOfBody } = req.body;
+    if (!password || !email) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
 
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid email or password.' });
-    }
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: "A user with this email already exists" });
+    }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid email or password.' });
-    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    res.status(200).json({
-      message: 'Login successful!',
-      token: generateToken(user._id),
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-    });
+    const user = new User({
+      email,
+      password: hashedPassword,
+      name,
+      ...restOfBody
+    });
+    await user.save();
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
 
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+// @desc Get all users
+// @route GET /api/users
+// @access Public
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select('-password');
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
-// Create a new user (with password hashing)
-router.post('/', async (req, res) => {
-  try {
-    const { password, ...restOfBody } = req.body;
-    if (!password) {
-      return res.status(400).json({ message: "Password is required" });
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({
-      password: hashedPassword,
-      ...restOfBody
-    });
-    await user.save();
-    res.status(201).json(user);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
+// @desc Get a user by ID
+// @route GET /api/users/:id
+// @access Public
+const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
-// Get all users
-router.get('/', async (req, res) => {
-  try {
-    const users = await User.find().select('-password');
-    res.json(users);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+// @desc Update a user by ID
+// @route PUT /api/users/:id
+// @access Private
+const updateUser = async (req, res) => {
+  try {
+    const { password, ...updates } = req.body;
+    
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      updates.password = await bcrypt.hash(password, salt);
+    }
+    
+    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true }).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
 
-// Get a user by ID
-router.get('/:id', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id).select('-password');
-    if (!user) {
-      res.status(404).json({ message: 'User not found' });
-    } else {
-      res.json(user);
-    }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+// @desc Delete a user by ID
+// @route DELETE /api/users/:id
+// @access Private
+const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ message: 'User deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
-// Get authenticated user info (protected route)
-router.get('/isAuthenticated', protect, async (req, res) => {
-  res.status(200).json({
-    _id: req.user._id,
-    name: req.user.name,
-    email: req.user.email,
-    role: req.user.role,
-  });
-});
+// @desc Get authenticated user info
+// @route GET /api/users/isAuthenticated
+// @access Private
+const getAuthenticatedUser = async (req, res) => {
+  res.status(200).json({
+    _id: req.user._id,
+    name: req.user.name,
+    email: req.user.email,
+    role: req.user.role,
+  });
+};
 
-module.exports = router;
+module.exports = {
+  registerUser,
+  getAllUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+  getAuthenticatedUser,
+  generateToken
+};
